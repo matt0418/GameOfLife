@@ -1,14 +1,16 @@
 import React from 'react'
 import Cell from './Cell'
 import Universe from '../rules/Universe'
+import GameControls from './GameControls'
+import HeaderInputs from './HeaderInputs'
 
 class Game extends React.Component {
     constructor() {
         super()
         this.state = {
             universe: new Universe(),
-            size: [50, 30],
-            gameRunning: false,
+            size: [25, 25],
+            startGame: false,
             interval: 100
         }
     }
@@ -17,8 +19,8 @@ class Game extends React.Component {
         this.setState({
             ...this.state,
             universe: new Universe(),
-            gameRunning: false,
-            interval: 100
+            startGame: false,
+            interval: 10
         }, () => {
             if (this.intervalRef) {
                 clearInterval(this.intervalRef)
@@ -27,12 +29,12 @@ class Game extends React.Component {
     }
 
     handleRowChange = e => {
-        if (!this.state.gameRunning) {
+        if (!this.state.startGame) {
             let actualSize = this.state.size
             if (e.target.value < 100) {
                 actualSize[1] = e.target.value
             } else {
-                actualSize[1] = 30
+                actualSize[1] = 25
             }
             this.setState({
                 size: actualSize
@@ -42,12 +44,12 @@ class Game extends React.Component {
     }
 
     handleColumnChange = e => {
-        if (!this.state.gameRunning) {
+        if (!this.state.startGame) {
             let actualSize = this.state.size
             if (e.target.value < 100) {
                 actualSize[0] = e.target.value
             } else {
-                actualSize[0] = 50
+                actualSize[0] = 25
             }
             this.setState({
                 size: actualSize
@@ -56,10 +58,19 @@ class Game extends React.Component {
         }
     }
 
-    startGame = () => {
-        if (!this.state.gameRunning) {
+    handleIntervalChange = e => {
+
+        if (!this.state.startGame) {
             this.setState({
-                gameRunning: true
+                interval: e.target.value
+            })
+        }
+    }
+
+    startGame = () => {
+        if (!this.state.startGame) {
+            this.setState({
+                startGame: true
             }, () => {
                 this.intervalRef = setInterval(() => this.runGame(), this.state.interval)
             })
@@ -68,7 +79,7 @@ class Game extends React.Component {
 
     stopGame = () => {
         this.setState({
-            gameRunning: false
+            startGame: false
         }, () => {
             if (this.intervalRef) {
                 clearInterval(this.intervalRef)
@@ -84,7 +95,7 @@ class Game extends React.Component {
     }
 
     storeCell = position => {
-        if (!this.state.gameRunning) {
+        if (!this.state.startGame) {
             this.setState({
                 universe: this.state.universe.storeCell(position)
             })
@@ -115,22 +126,9 @@ class Game extends React.Component {
         return (
             <div className="worldContainer">
               <div className="headerContainer">
-                <div className="headerInnerContainer">
-                  <label className="label">
-                    Rows:
-                    <input className="input" type="text" value={this.state.size[1]} onChange={this.handleRowChange} />
-                  </label>
-                  <label className="label">
-                    Columns:
-                    <input className="input" type="text" value={this.state.size[0]} onChange={this.handleColumnChange} />
-                  </label>
-                </div>
-                <div className="headerButtons">
-                  <button className="submit" onClick={this.startGame}>Start</button>
-                  <button className="submit" onClick={this.stopGame}>Stop</button>
-                  <button className="submit" onClick={this.handleClear}>Clear</button>
-                </div>
-                Generation: {this.state.universe.getGeneration()}
+                <HeaderInputs size={this.state.size} interval={this.state.interval} handleRowChange={this.handleRowChange} handleColumnChange={this.handleColumnChange} handleIntervalChange={this.handleIntervalChange}/>
+                <GameControls startGame={this.startGame} stopGame={this.stopGame} handleClear={this.handleClear}/>
+                <h3>Generation: {this.state.universe.getGeneration()}</h3>
               </div>
               <div className="boardContainer">
               {this.renderBoard()}
