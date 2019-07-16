@@ -20,7 +20,7 @@ class Game extends React.Component {
             ...this.state,
             universe: new Universe(),
             startGame: false,
-            interval: 10
+            interval: 100
         }, () => {
             if (this.intervalRef) {
                 clearInterval(this.intervalRef)
