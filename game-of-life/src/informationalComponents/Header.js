@@ -18,6 +18,8 @@ const HeaderContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background: #689775;
+    color: white;
 `
 
 const StyledTitle = styled.h1`
