@@ -102,6 +102,8 @@ class Game extends React.Component {
         }
     }
 
+ 
+
     renderBoard = () => {
         let newWorld = []
         let cellRow = []
@@ -121,13 +123,34 @@ class Game extends React.Component {
         return newWorld
     }
 
+    renderRandomBoard = () => {
+        let newWorld = []
+        let cellRow = []
+
+        for (let i = 0; i < this.state.size[0]; i++) {
+            for (let j = 0; j< this.state.size[1]; j++) {
+                let rando = Math.random()
+                let position = {x:i, y:j}
+                if (rando > 0.6) {
+                    this.setState({
+                        universe: this.state.universe.storeCell(position)
+                    })
+                    cellRow.push(<Cell key={[i, j]} position={{x:i, y:j}} live={true} storeCell={this.storeCell}/>)
+                }
+            }
+            newWorld.push(<div className="row" key={i}>{cellRow}</div>)
+            cellRow=[]
+        }
+        return newWorld
+    }
+
     render() {
         console.log(this.state.universe)
         return (
             <div className="worldContainer">
               <div className="headerContainer">
                 <HeaderInputs size={this.state.size} interval={this.state.interval} handleRowChange={this.handleRowChange} handleColumnChange={this.handleColumnChange} handleIntervalChange={this.handleIntervalChange}/>
-                <GameControls startGame={this.startGame} stopGame={this.stopGame} handleClear={this.handleClear}/>
+                <GameControls startGame={this.startGame} stopGame={this.stopGame} handleClear={this.handleClear} renderRandomBoard={this.renderRandomBoard}/>
                 <h3>Generation: {this.state.universe.getGeneration()}</h3>
               </div>
               <div className="boardContainer">
