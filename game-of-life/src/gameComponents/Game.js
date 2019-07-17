@@ -174,6 +174,7 @@ const BoardContainer = styled.div`
     flex: 1;
     justify-content: center;
     padding: 0 60px;
+    padding-bottom: 75px;
 `
 
 export default Game
