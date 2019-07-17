@@ -3,6 +3,7 @@ import Cell from './Cell'
 import Universe from '../rules/Universe'
 import GameControls from './GameControls'
 import HeaderInputs from './HeaderInputs'
+import styled from 'styled-components'
 
 class Game extends React.Component {
     constructor() {
@@ -117,7 +118,7 @@ class Game extends React.Component {
                 }
                 
             }
-            newWorld.push(<div className="row" key={i}>{cellRow}</div>)
+            newWorld.push(<div key={i}>{cellRow}</div>)
             cellRow=[]
         }
         return newWorld
@@ -138,7 +139,7 @@ class Game extends React.Component {
                     cellRow.push(<Cell key={[i, j]} position={{x:i, y:j}} live={true} storeCell={this.storeCell}/>)
                 }
             }
-            newWorld.push(<div className="row" key={i}>{cellRow}</div>)
+            newWorld.push(<div key={i}>{cellRow}</div>)
             cellRow=[]
         }
         return newWorld
@@ -147,18 +148,32 @@ class Game extends React.Component {
     render() {
         console.log(this.state.universe)
         return (
-            <div className="worldContainer">
-              <div className="headerContainer">
+            <div>
+              <HeaderContainer>
                 <HeaderInputs size={this.state.size} interval={this.state.interval} handleRowChange={this.handleRowChange} handleColumnChange={this.handleColumnChange} handleIntervalChange={this.handleIntervalChange}/>
                 <GameControls startGame={this.startGame} stopGame={this.stopGame} handleClear={this.handleClear} renderRandomBoard={this.renderRandomBoard}/>
                 <h3>Generation: {this.state.universe.getGeneration()}</h3>
-              </div>
-              <div className="boardContainer">
+              </HeaderContainer>
+              <BoardContainer>
               {this.renderBoard()}
-              </div>
+              </BoardContainer>
             </div>
           );
     }
 }
+
+const HeaderContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 5%;
+`
+
+const BoardContainer = styled.div`
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    padding: 0 60px;
+`
 
 export default Game
